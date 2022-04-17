@@ -110,3 +110,70 @@ func (c *core) sCard(bucket string, key string) (num int, err error) {
 
 	return num, err
 }
+
+func (c *core) sHasKey(bucket string, key string) (ok bool, err error) {
+
+	if err = c.db.View(
+
+		func(tx *nutsdb.Tx) error {
+			ok, err = tx.SHasKey(bucket, []byte(key))
+			if err != nil {
+				return err
+			}
+
+			return nil
+		}); err != nil {
+
+		return
+	}
+
+	return
+}
+
+func (c *core) sPop(bucket string, key string) (item string, err error) {
+
+	if err = c.db.Update(
+		func(tx *nutsdb.Tx) error {
+
+			itemByte, err := tx.SPop(bucket, []byte(key))
+			if err != nil {
+				return err
+			}
+			item = string(itemByte)
+
+			return nil
+
+		}); err != nil {
+
+		return
+	}
+
+	return
+}
+
+func (c *core) sRem(bucket string, key string, items []string) error {
+
+	if err := c.db.Update(
+
+		func(tx *nutsdb.Tx) error {
+
+			if len(items) > 0 {
+
+				itemsByte := make([][]byte, len(items))
+				for k, v := range items {
+					itemsByte[k] = []byte(v)
+				}
+
+				if err := tx.SRem(bucket, []byte(key), itemsByte...); err != nil {
+					return err
+				}
+			}
+
+			return nil
+		}); err != nil {
+
+		return err
+	}
+
+	return nil
+}

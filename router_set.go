@@ -9,7 +9,13 @@ func (s *NutsHTTPServer) initSetRouter() {
 
 	sr.POST("/sismember/:bucket/:key", s.SIsMember)
 
+	sr.POST("/srem/:bucket/:key", s.Srem)
+
 	sr.GET("/smembers/:bucket/:key", s.SMembers)
+
+	sr.GET("/shaskey/:bucket/:key", s.SHasKey)
+
+	sr.GET("/spop/:bucket/:key", s.Spop)
 
 	sr.GET("/scard/:bucket/:key", s.SCard)
 }

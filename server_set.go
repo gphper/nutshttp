@@ -195,3 +195,102 @@ func (s *NutsHTTPServer) SCard(c *gin.Context) {
 
 	WriteSucc(c, resp)
 }
+
+func (s *NutsHTTPServer) SHasKey(c *gin.Context) {
+
+	type SHasKeyResp struct {
+		IsExist bool `json:"is_exist"`
+	}
+
+	var (
+		ok      bool
+		err     error
+		baseUri BaseUri
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+
+		return
+	}
+
+	if ok, err = s.core.sHasKey(baseUri.Bucket, baseUri.Key); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+
+		return
+	}
+
+	WriteSucc(c, SHasKeyResp{
+		IsExist: ok,
+	})
+}
+
+func (s *NutsHTTPServer) Spop(c *gin.Context) {
+
+	type sPopResp struct {
+		Item string `json:"item"`
+	}
+
+	var (
+		err     error
+		baseUri BaseUri
+		resp    sPopResp
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+
+		return
+	}
+
+	if resp.Item, err = s.core.sPop(baseUri.Bucket, baseUri.Key); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, resp)
+}
+
+func (s *NutsHTTPServer) Srem(c *gin.Context) {
+
+	type SRemRequest struct {
+		Value []string `json:"value" binding:"required"`
+	}
+
+	var (
+		err         error
+		baseUri     BaseUri
+		sRemRequest SRemRequest
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = c.ShouldBindJSON(&sRemRequest); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = s.core.sRem(baseUri.Bucket, baseUri.Key, sRemRequest.Value); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, struct{}{})
+}
