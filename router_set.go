@@ -18,4 +18,16 @@ func (s *NutsHTTPServer) initSetRouter() {
 	sr.GET("/spop/:bucket/:key", s.Spop)
 
 	sr.GET("/scard/:bucket/:key", s.SCard)
+
+	sr.POST("/sdiffbyonebucket/:bucket/:key", s.SDiffByOneBucket)
+
+	sr.POST("/sdiffbytwobuckets/:bucket/:key", s.SDiffByTwoBuckets)
+
+	sr.POST("/smovebyonebucket/:bucket/:key", s.SMoveByOneBucket)
+
+	sr.POST("/smovebytwobuckets/:bucket/:key", s.SMoveByTwoBuckets)
+
+	sr.POST("/sunionbyonebucket/:bucket/:key", s.SUnionByOneBucket)
+
+	sr.POST("/sunionbytwobuckets/:bucket/:key", s.SUnionByTwoBuckets)
 }

@@ -177,3 +177,149 @@ func (c *core) sRem(bucket string, key string, items []string) error {
 
 	return nil
 }
+
+func (c *core) sDiffByOneBucket(bucket string, key1 string, key2 string) (items []string, err error) {
+
+	if err = c.db.View(
+
+		func(tx *nutsdb.Tx) error {
+			itemsBytes, err := tx.SDiffByOneBucket(bucket, []byte(key1), []byte(key2))
+			if err != nil {
+
+				return err
+			}
+
+			if len(itemsBytes) > 0 {
+				items = make([]string, len(itemsBytes))
+				for k, itemByte := range itemsBytes {
+					items[k] = string(itemByte)
+				}
+			}
+
+			return nil
+		}); err != nil {
+
+		return
+	}
+
+	return
+}
+
+func (c *core) sDiffByTwoBuckets(bucket1 string, bucket2 string, key1 string, key2 string) (items []string, err error) {
+
+	if err = c.db.View(
+
+		func(tx *nutsdb.Tx) error {
+			itemsBytes, err := tx.SDiffByTwoBuckets(bucket1, []byte(key1), bucket2, []byte(key2))
+			if err != nil {
+
+				return err
+			}
+
+			if len(itemsBytes) > 0 {
+				items = make([]string, len(itemsBytes))
+				for k, itemByte := range itemsBytes {
+					items[k] = string(itemByte)
+				}
+			}
+
+			return nil
+		}); err != nil {
+
+		return
+	}
+
+	return
+}
+
+func (c *core) sMoveByOneBucket(bucket string, key1 string, key2 string, item string) (ok bool, err error) {
+
+	if err = c.db.Update(
+		func(tx *nutsdb.Tx) error {
+			ok, err = tx.SMoveByOneBucket(bucket, []byte(key1), []byte(key2), []byte(item))
+			if err != nil {
+
+				return err
+			}
+
+			return nil
+		}); err != nil {
+
+		return
+	}
+
+	return
+}
+
+func (c *core) sMoveByTwoBuckets(bucket string, key1 string, bucket2 string, key2 string, item string) (ok bool, err error) {
+
+	if err = c.db.Update(
+		func(tx *nutsdb.Tx) error {
+			ok, err = tx.SMoveByTwoBuckets(bucket, []byte(key1), bucket2, []byte(key2), []byte(item))
+			if err != nil {
+
+				return err
+			}
+
+			return nil
+		}); err != nil {
+
+		return
+	}
+
+	return
+}
+
+func (c *core) sUnionByOneBucket(bucket string, key1 string, key2 string) (items []string, err error) {
+
+	if err = c.db.View(
+
+		func(tx *nutsdb.Tx) error {
+			itemBytes, err := tx.SUnionByOneBucket(bucket, []byte(key1), []byte(key2))
+			if err != nil {
+
+				return err
+			}
+
+			if len(itemBytes) > 0 {
+				items = make([]string, len(itemBytes))
+				for k, itemByte := range itemBytes {
+					items[k] = string(itemByte)
+				}
+			}
+
+			return nil
+		}); err != nil {
+
+		return
+	}
+
+	return
+}
+
+func (c *core) sUnionByTwoBuckets(bucket1 string, key1 string, bucket2 string, key2 string) (items []string, err error) {
+
+	if err = c.db.View(
+
+		func(tx *nutsdb.Tx) error {
+			itemBytes, err := tx.SUnionByTwoBuckets(bucket1, []byte(key1), bucket2, []byte(key2))
+			if err != nil {
+
+				return err
+			}
+
+			if len(itemBytes) > 0 {
+				items = make([]string, len(itemBytes))
+				for k, itemByte := range itemBytes {
+					items[k] = string(itemByte)
+				}
+			}
+
+			return nil
+		}); err != nil {
+
+		return
+	}
+
+	return
+}

@@ -294,3 +294,274 @@ func (s *NutsHTTPServer) Srem(c *gin.Context) {
 
 	WriteSucc(c, struct{}{})
 }
+
+func (s *NutsHTTPServer) SDiffByOneBucket(c *gin.Context) {
+
+	type (
+		SDiffByOneBucketRequest struct {
+			Key string `json:"key" binding:"required"`
+		}
+
+		SDiffByOneBucketResp struct {
+			Items []string `json:"items"`
+		}
+	)
+
+	var (
+		err                     error
+		baseUri                 BaseUri
+		sDiffByOneBucketRequest SDiffByOneBucketRequest
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = c.ShouldBindJSON(&sDiffByOneBucketRequest); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	items, err := s.core.sDiffByOneBucket(baseUri.Bucket, baseUri.Key, sDiffByOneBucketRequest.Key)
+	if err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, SDiffByOneBucketResp{
+		Items: items,
+	})
+}
+
+func (s *NutsHTTPServer) SDiffByTwoBuckets(c *gin.Context) {
+
+	type (
+		SDiffByTwoBucketsRequest struct {
+			Bucket string `json:"bucket" binding:"required"`
+			Key    string `json:"key" binding:"required"`
+		}
+
+		SDiffByTwoBucketsResp struct {
+			Items []string `json:"items"`
+		}
+	)
+
+	var (
+		err                      error
+		baseUri                  BaseUri
+		sDiffByTwoBucketsRequest SDiffByTwoBucketsRequest
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = c.ShouldBindJSON(&sDiffByTwoBucketsRequest); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	items, err := s.core.sDiffByTwoBuckets(baseUri.Bucket, sDiffByTwoBucketsRequest.Bucket, baseUri.Key, sDiffByTwoBucketsRequest.Key)
+	if err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, SDiffByTwoBucketsResp{
+		Items: items,
+	})
+}
+
+func (s *NutsHTTPServer) SMoveByOneBucket(c *gin.Context) {
+	type (
+		SMoveByOneBucketRequest struct {
+			Key   string `json:"key" binding:"required"`
+			Value string `json:"value" binding:"required"`
+		}
+
+		SMoveByOneBucketResp struct {
+			Ok bool `json:"ok"`
+		}
+	)
+
+	var (
+		err                     error
+		baseUri                 BaseUri
+		sMoveByOneBucketRequest SMoveByOneBucketRequest
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = c.ShouldBindJSON(&sMoveByOneBucketRequest); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	ok, err := s.core.sMoveByOneBucket(baseUri.Bucket, baseUri.Key, sMoveByOneBucketRequest.Key, sMoveByOneBucketRequest.Value)
+	if err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, SMoveByOneBucketResp{
+		Ok: ok,
+	})
+}
+
+func (s *NutsHTTPServer) SMoveByTwoBuckets(c *gin.Context) {
+	type (
+		SMoveByTwoBucketsRequest struct {
+			Bucket string `json:"bucket" binding:"required"`
+			Key    string `json:"key" binding:"required"`
+			Value  string `json:"value" binding:"required"`
+		}
+
+		SMoveByTwoBucketsResp struct {
+			Ok bool `json:"ok"`
+		}
+	)
+
+	var (
+		err                      error
+		baseUri                  BaseUri
+		sMoveByTwoBucketsRequest SMoveByTwoBucketsRequest
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = c.ShouldBindJSON(&sMoveByTwoBucketsRequest); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	ok, err := s.core.sMoveByTwoBuckets(baseUri.Bucket, baseUri.Key, sMoveByTwoBucketsRequest.Bucket, sMoveByTwoBucketsRequest.Key, sMoveByTwoBucketsRequest.Value)
+	if err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, SMoveByTwoBucketsResp{
+		Ok: ok,
+	})
+}
+
+func (s *NutsHTTPServer) SUnionByOneBucket(c *gin.Context) {
+	type (
+		SUnionByOneBucketRequest struct {
+			Key string `json:"key" binding:"required"`
+		}
+
+		SUnionByOneBucketResp struct {
+			Items []string `json:"items"`
+		}
+	)
+
+	var (
+		err                      error
+		baseUri                  BaseUri
+		sUnionByOneBucketRequest SUnionByOneBucketRequest
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = c.ShouldBindJSON(&sUnionByOneBucketRequest); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	items, err := s.core.sUnionByOneBucket(baseUri.Bucket, baseUri.Key, sUnionByOneBucketRequest.Key)
+	if err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, SUnionByOneBucketResp{
+		Items: items,
+	})
+}
+
+func (s *NutsHTTPServer) SUnionByTwoBuckets(c *gin.Context) {
+	type (
+		SUnionByTwoBucketsRequest struct {
+			Bucket string `json:"bucket" binding:"required"`
+			Key    string `json:"key" binding:"required"`
+		}
+
+		SUnionByTwoBucketsResp struct {
+			Items []string `json:"items"`
+		}
+	)
+
+	var (
+		err                       error
+		baseUri                   BaseUri
+		sUnionByTwoBucketsRequest SUnionByTwoBucketsRequest
+	)
+
+	if err = c.ShouldBindUri(&baseUri); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err = c.ShouldBindJSON(&sUnionByTwoBucketsRequest); err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	items, err := s.core.sUnionByTwoBuckets(baseUri.Bucket, baseUri.Key, sUnionByTwoBucketsRequest.Bucket, sUnionByTwoBucketsRequest.Key)
+	if err != nil {
+		WriteError(c, APIMessage{
+			Message: err.Error(),
+		})
+		return
+	}
+
+	WriteSucc(c, SUnionByTwoBucketsResp{
+		Items: items,
+	})
+}
